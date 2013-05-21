@@ -1,7 +1,7 @@
 GalleryCollector
 ================
 
-A tool to turn a folder into a thumbnail gallery
+A PHP tool to turn a folder into a thumbnail gallery
 
 ```PHP
 include 'gallery_collector.php';
