@@ -6,8 +6,8 @@
 * ThumbConfig([Array options])
 *   = Creates a ThumbConfig instance merging the given options onto the defaults.
 *     Default available options are:
-*       width: 140
-*       height: 93
+*       width: 157
+*       height: 105
 *       crop: true
 *       quality: 75
 *       forceDimensions: false
@@ -25,8 +25,8 @@ class ThumbConfig
 
   function __construct($options = Array()){
     $this->data = Array(
-      'width'=>140,
-      'height'=>93,
+      'width'=>157,
+      'height'=>105,
       'crop'=>true,
       'quality'=>75,
       'forceDimensions'=>false
