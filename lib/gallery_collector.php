@@ -31,7 +31,6 @@ require_once 'gallery_image.php';
 *   = Sets the gallery's content wrapping template it has two tags available:
 *     {{output}}, the holder for the content items.
 *     {{wrapper_class}}, the current ->wrapClass string.
-*
 * ->contentTemplate :String
 *   = Returns the current template for the content items.
 *   :Default -> '''
@@ -103,6 +102,7 @@ EOT;
           $this->images[] = new GalleryImage($this->folder,$url_path, $image_name, $extension);
         }
       }
+      usort($this->images, array('GalleryImage','cmp_obj'));
     }
   }
 
@@ -151,8 +151,6 @@ EOT;
     );
     return str_replace($replacers, $replacments, $wrapper_output);
   }
-
-
 
   private function _set_thumbConfig($value){
     $this->thumb_config = $value;

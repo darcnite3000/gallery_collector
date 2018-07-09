@@ -92,7 +92,6 @@ class GalleryImage{
       imagedestroy($in_image);
     }
   }
-
   private function generatePNGThumb($config){
     $in_image = @imagecreatefrompng($this->image_path);
     if($in_image){
@@ -108,43 +107,53 @@ class GalleryImage{
 
 
   private function createThumbImage($config, &$in_image){
-    $in_width = imagesx($in_image);
-    $in_height = imagesy($in_image);
+      $in_width = imagesx($in_image);
+      $in_height = imagesy($in_image);
 
-    $image_isLandscape = ($in_width>$in_height);
-    $config_isLandscape = ($config->width>$config->height);
-    if(!$config->forceDimensions && ($image_isLandscape == !$config_isLandscape)){
-      $width = $config->height;
-      $height = $config->width;
-    }else{
-      $width = $config->width;
-      $height = $config->height;
-    }
+      $image_isLandscape = ($in_width>$in_height);
+      $config_isLandscape = ($config->width>$config->height);
+      if(!$config->forceDimensions && ($image_isLandscape == !$config_isLandscape)){
+        $width = $config->height;
+        $height = $config->width;
+      }else{
+        $width = $config->width;
+        $height = $config->height;
+      }
 
-    $width_ratio = $width / $in_width;
-    $height_ratio = $height / $in_height;
-    if ($config->crop) {
-      if ($width_ratio > $height_ratio) {
-        $ratio = $width_ratio;
+      $width_ratio = $width / $in_width;
+      $height_ratio = $height / $in_height;
+      if ($config->crop) {
+        if ($width_ratio > $height_ratio) {
+          $ratio = $width_ratio;
+        } else {
+          $ratio = $height_ratio;
+        }
+        $out_width = $in_width * $ratio;
+        $out_height = $in_height * $ratio;
+        $out = imagecreatetruecolor($width, $height);
+        imagecopyresampled($out, $in_image, ($width - $out_width) / 2, ($height - $out_height) / 2, 0, 0, $out_width, $out_height, $in_width, $in_height);
       } else {
-        $ratio = $height_ratio;
+        if ($width_ratio < $height_ratio) {
+          $ratio = $width_ratio;
+        } else {
+          $ratio = $height_ratio;
+        }
+        $out_width = $in_width * $ratio;
+        $out_height = $in_height * $ratio;
+        $out = imagecreatetruecolor($out_width, $out_height);
+        imagecopyresampled($out, $in_image, 0, 0, 0, 0, $out_width, $out_height, $in_width, $in_height);
       }
-      $out_width = $in_width * $ratio;
-      $out_height = $in_height * $ratio;
-      $out = imagecreatetruecolor($width, $height);
-      imagecopyresampled($out, $in_image, ($width - $out_width) / 2, ($height - $out_height) / 2, 0, 0, $out_width, $out_height, $in_width, $in_height);
-    } else {
-      if ($width_ratio < $height_ratio) {
-        $ratio = $width_ratio;
-      } else {
-        $ratio = $height_ratio;
+      return $out;
+  }
+
+  static function cmp_obj($a, $b)
+  {
+      $al = strtolower($a->image_name);
+      $bl = strtolower($b->image_name);
+      if ($al == $bl) {
+          return 0;
       }
-      $out_width = $in_width * $ratio;
-      $out_height = $in_height * $ratio;
-      $out = imagecreatetruecolor($out_width, $out_height);
-      imagecopyresampled($out, $in_image, 0, 0, 0, 0, $out_width, $out_height, $in_width, $in_height);
-    }
-    return $out;
+      return ($al > $bl) ? +1 : -1;
   }
 
   public function __get($name){
