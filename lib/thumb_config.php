@@ -10,11 +10,11 @@
 *       height: 93
 *       crop: true
 *       quality: 75
-*       forceDimensions: 75
+*       forceDimensions: false
 *
 * ->#String :#Type
 *   = Returns the value set for the #String if #String exists in the Config Object.
-* 
+*
 * ->#String=(#Type value)
 *   = Sets the value set for the #String if #String exists in the Config Object.
 *
@@ -22,7 +22,7 @@
 class ThumbConfig
 {
   private $data;
-  
+
   function __construct($options = Array()){
     $this->data = Array(
       'width'=>140,

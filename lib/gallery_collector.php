@@ -2,7 +2,7 @@
 require_once 'thumb_config.php';
 require_once 'gallery_image.php';
 /**
-* Gallery Collector 
+* Gallery Collector
 * - A tool to generate a thumbnail gallery from a folder of images
 * :Requires GalleryImage, ThumbConfig
 *
@@ -29,8 +29,9 @@ require_once 'gallery_image.php';
 *
 * ->wrapTemplate=(String templateString)
 *   = Sets the gallery's content wrapping template it has two tags available:
-*     {{output}}, the holder for the content items. 
+*     {{output}}, the holder for the content items.
 *     {{wrapper_class}}, the current ->wrapClass string.
+*
 * ->contentTemplate :String
 *   = Returns the current template for the content items.
 *   :Default -> '''
@@ -56,12 +57,12 @@ require_once 'gallery_image.php';
 *     on ->build() for {{wrap_class}}.
 *
 * ->contentClass :String
-*   = Returns the current class string that will be used in the template 
+*   = Returns the current class string that will be used in the template
 *     on ->build() for {{content_class}}.
 *   :Default -> 'gallery-item'
 *
 * ->contentClass=(String classString)
-*   = Sets the current class string that will be used in the template 
+*   = Sets the current class string that will be used in the template
 *     on ->build() for {{content_class}}.
 */
 class GalleryCollector{
@@ -72,10 +73,10 @@ class GalleryCollector{
   private $wrapper_template;
   private $content_template;
   private $thumb_config;
-  
-  
+
+
   function __construct($file_path, $url_path = "", $thumb_config = NULL){
-    $this->images = Array(); 
+    $this->images = Array();
     $this->folder = dir($file_path);
     if($thumb_config === NULL){
       $this->thumb_config = new ThumbConfig();
@@ -104,7 +105,7 @@ EOT;
       }
     }
   }
-  
+
   public function __get($name){
     $method_name = "_get_{$name}";
     if(method_exists($this, $method_name)){
@@ -117,7 +118,7 @@ EOT;
       return $this->$method_name($value);
     }
   }
-  
+
   public function build($clear_cache=false){
     $wrapper_output = $this->wrapper_template;
     $output = "";
@@ -150,9 +151,9 @@ EOT;
     );
     return str_replace($replacers, $replacments, $wrapper_output);
   }
-  
 
-  
+
+
   private function _set_thumbConfig($value){
     $this->thumb_config = $value;
   }
@@ -171,7 +172,7 @@ EOT;
   private function _get_contentTemplate(){
     return $this->content_template;
   }
-  
+
 
   private function _set_wrapClass($value){
     $this->wrapper_class = $value;

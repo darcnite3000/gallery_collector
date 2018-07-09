@@ -14,14 +14,14 @@ require_once 'thumb_config.php';
 *
 * ->image_url :String
 *   = Returns the url for the image that could be used as an image src.
-* 
+*
 * ->image_path :String
 *   = Returns the path to the image in the filesystem.
 *
 * ->thumb_url :String
 *   = Returns the url for the image's thumbnail
 *     that could be used as an image src.
-* 
+*
 * ->thumb_path :String
 *   = Returns the path to the image's thumbnail in the filesystem.
 *
@@ -40,14 +40,14 @@ class GalleryImage{
   private $url_path;
   private $image_name;
   private $extension;
-  
+
   function __construct($folder, $url_path, $image_name, $extension){
     $this->folder = $folder;
     $this->url_path = $url_path;
     $this->image_name = $image_name;
     $this->extension = $extension;
   }
-  
+
   private function _get_image_name(){
     return $this->image_name;
   }
@@ -63,11 +63,11 @@ class GalleryImage{
   private function _get_thumb_path(){
     return "{$this->folder->path}/{$this->image_name}_thumb.{$this->extension}";
   }
-  
+
   public function hasThumb(){
     return file_exists($this->thumb_path);
   }
-  
+
   public function generateThumb($config){
     switch (strtolower($this->extension)) {
       case 'jpg':
@@ -79,7 +79,7 @@ class GalleryImage{
         break;
     }
   }
-  
+
   private function generateJPEGThumb($config){
     $in_image = @imagecreatefromjpeg($this->image_path);
     if($in_image){
@@ -92,7 +92,7 @@ class GalleryImage{
       imagedestroy($in_image);
     }
   }
-  
+
   private function generatePNGThumb($config){
     $in_image = @imagecreatefrompng($this->image_path);
     if($in_image){
@@ -105,12 +105,12 @@ class GalleryImage{
       imagedestroy($in_image);
     }
   }
-  
-  
+
+
   private function createThumbImage($config, &$in_image){
     $in_width = imagesx($in_image);
     $in_height = imagesy($in_image);
-    
+
     $image_isLandscape = ($in_width>$in_height);
     $config_isLandscape = ($config->width>$config->height);
     if(!$config->forceDimensions && ($image_isLandscape == !$config_isLandscape)){
@@ -120,7 +120,7 @@ class GalleryImage{
       $width = $config->width;
       $height = $config->height;
     }
-    
+
     $width_ratio = $width / $in_width;
     $height_ratio = $height / $in_height;
     if ($config->crop) {
@@ -146,14 +146,14 @@ class GalleryImage{
     }
     return $out;
   }
-  
+
   public function __get($name){
     $method_name = "_get_{$name}";
     if(method_exists($this, $method_name)){
       return $this->$method_name();
     }
   }
-  
+
   public function __toString(){
     return '<img src="'.$this->image_url.'">';
   }
